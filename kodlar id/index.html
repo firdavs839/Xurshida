@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <title>Parol Generator + 2ta O‘yin</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      text-align: center;
+      color: #fff;
+      padding: 50px;
+    }
+
+    h1, h2 {
+      margin-bottom: 10px;
+    }
+
+    #password {
+      font-size: 28px;
+      margin: 20px auto;
+      padding: 10px;
+      width: fit-content;
+      background-color: rgba(255,255,255,0.1);
+      border-radius: 10px;
+    }
+
+    button {
+      background-color: #fff;
+      color: #333;
+      padding: 10px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 10px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #ddd;
+    }
+
+    .game-section {
+      margin-top: 60px;
+      background: rgba(0,0,0,0.1);
+      padding: 30px;
+      border-radius: 12px;
+      display: inline-block;
+      max-width: 400px;
+    }
+
+    input[type="number"], input[type="text"] {
+      padding: 8px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      width: 120px;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔐 Tasodifiy Parol Generator</h1>
+  <div id="password">Parol shu yerda chiqadi</div>
+  <button onclick="generatePassword()">Parol Yaratish</button>
+
+  <!-- O'yin 1: Raqamni top -->
+  <div class="game-section">
+    <h2>🎯 Raqamni Top</h2>
+    <p>1 dan 10 gacha son tanlaganman. Topa olasizmi?</p>
+    <input type="number" id="guess" min="1" max="10" />
+    <button onclick="checkGuess()">Tekshirish</button>
+    <div id="game-result" class="result"></div>
+  </div>
+
+  <!-- O'yin 2: Rangni top -->
+  <div class="game-section">
+    <h2>🎨 Rangni Top</h2>
+    <p>Qaysi rang tanlangan deb o‘ylaysiz? (red, green, blue, yellow)</p>
+    <input type="text" id="color-guess" placeholder="Masalan: red" />
+    <button onclick="checkColor()">Tekshirish</button>
+    <div id="color-result" class="result"></div>
+  </div>
+
+  <script>
+    // Parol generatori
+    function generatePassword(length = 12) {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+      let password = "";
+      for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * chars.length);
+        password += chars[randomIndex];
+      }
+      document.getElementById("password").innerText = password;
+    }
+
+    // O'yin 1: Raqamni topish
+    let secretNumber = Math.floor(Math.random() * 10) + 1;
+
+    function checkGuess() {
+      const guess = parseInt(document.getElementById("guess").value);
+      const result = document.getElementById("game-result");
+
+      if (isNaN(guess)) {
+        result.innerText = "❗ Iltimos, son kiriting.";
+        result.style.color = "orange";
+        return;
+      }
+
+      if (guess === secretNumber) {
+        result.innerText = "🎉 To‘g‘ri! Barakalla!";
+        result.style.color = "lightgreen";
+        // Yangi son tanlash
+        secretNumber = Math.floor(Math.random() * 10) + 1;
+      } else if (guess < secretNumber) {
+        result.innerText = "🔼 Katta son kiriting.";
+        result.style.color = "yellow";
+      } else {
+        result.innerText = "🔽 Kichik son kiriting.";
+        result.style.color = "yellow";
+      }
+    }
+
+    // O'yin 2: Rangni topish
+    const colors = ["red", "green", "blue", "yellow"];
+    let secretColor = colors[Math.floor(Math.random() * colors.length)];
+
+    function checkColor() {
+      const guess = document.getElementById("color-guess").value.toLowerCase();
+      const result = document.getElementById("color-result");
+
+      if (!colors.includes(guess)) {
+        result.innerText = "❗ Faqat quyidagi ranglardan foydalaning: red, green, blue, yellow.";
+        result.style.color = "orange";
+        return;
+      }
+
+      if (guess === secretColor) {
+        result.innerText = "🎉 To‘g‘ri rang!";
+        result.style.color = "lightgreen";
+        secretColor = colors[Math.floor(Math.random() * colors.length)];
+      } else {
+        result.innerText = "❌ Noto‘g‘ri. Yana urinib ko‘ring.";
+        result.style.color = "red";
+      }
+    }
+  </script>
+</body>
+</html>
